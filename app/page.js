@@ -110,11 +110,7 @@ export default function Home() {
       </div>
       {/* timer */}
       <div className="flex items-center justify-center mt-8">
-        {isRunning ? (
-          <p className="text-8xl md:text-9xl font-bold">{`${minutes}:${seconds}`}</p>
-        ) : (
-          <p className="text-8xl md:text-9xl font-bold">{`${minutes}:00`}</p>
-        )}
+        <p className="text-8xl md:text-9xl font-bold">{`${minutes}:${seconds}`}</p>
       </div>
       <div className="flex items-center justify-center mt-8">
         {!isRunning ? (

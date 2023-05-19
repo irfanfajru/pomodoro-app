@@ -3,10 +3,13 @@ import { Fasthand, Alkatra } from "next/font/google";
 import { useState } from "react";
 import { useTimer } from "react-timer-hook";
 import Settings from "./settings";
+import useSound from "use-sound";
 
 const fastHand = Fasthand({ subsets: ["latin"], weight: ["400"] });
 const alkatra = Alkatra({ subsets: ["latin"], weight: ["400"] });
 export default function Home() {
+  const [play] = useSound("/alarm-sound.mp3");
+
   const [isPomodoro, setIsPomodoro] = useState(true);
   const [isShortBreak, setIsShortBreak] = useState(false);
   const [isLongBreak, setIsLongBreak] = useState(false);
@@ -19,6 +22,10 @@ export default function Home() {
     expiryTimestamp: () =>
       new Date().setSeconds(new Date().getSeconds() + pomodoroTime * 60),
     autoStart: false,
+    onExpire: () => {
+      play();
+      resetTimer();
+    },
   });
 
   // function to reset timer

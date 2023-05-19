@@ -45,7 +45,7 @@ export default function Home() {
   return (
     <div className="p-10 text-white h-screen bg-center bg-cover bg-no-repeat bg-[url('/bg.gif')] bg-gray-300 bg-blend-multiply">
       {/* header */}
-      <div className="mt-4 w-fit">
+      <div className="mt-4 w-fit text-center md:text-start">
         <h1 className={`${fastHand.className} text-5xl`}>Study With Me</h1>
         <div className={`${alkatra.className} text-end`}>
           <a
@@ -69,8 +69,8 @@ export default function Home() {
           type="button"
           className={
             isPomodoro
-              ? "text-black border border-white bg-white font-medium rounded-full text-lg px-5 py-2.5 text-center mr-2 mb-2"
-              : "text-white hover:text-black border border-white hover:bg-white font-medium rounded-full text-lg px-5 py-2.5 text-center mr-2 mb-2"
+              ? "text-black border border-white bg-white font-medium rounded-full text-xs md:text-lg px-5 py-2.5 text-center mr-2 mb-2"
+              : "text-white hover:text-black border border-white hover:bg-white font-medium rounded-full text-xs md:text-lg px-5 py-2.5 text-center mr-2 mb-2"
           }
         >
           Pomodoro
@@ -85,8 +85,8 @@ export default function Home() {
           type="button"
           className={
             isShortBreak
-              ? "text-black border border-white bg-white font-medium rounded-full text-lg px-5 py-2.5 text-center mr-2 mb-2"
-              : "text-white hover:text-black border border-white hover:bg-white font-medium rounded-full text-lg px-5 py-2.5 text-center mr-2 mb-2"
+              ? "text-black border border-white bg-white font-medium rounded-full text-xs px-5 py-2.5 text-center mr-2 mb-2"
+              : "text-white hover:text-black border border-white hover:bg-white font-medium rounded-full text-xs md:text-lg px-5 py-2.5 text-center mr-2 mb-2"
           }
         >
           Short Break
@@ -101,8 +101,8 @@ export default function Home() {
           type="button"
           className={
             isLongBreak
-              ? "text-black border border-white bg-white font-medium rounded-full text-lg px-5 py-2.5 text-center mr-2 mb-2"
-              : "text-white hover:text-black border border-white hover:bg-white font-medium rounded-full text-lg px-5 py-2.5 text-center mr-2 mb-2"
+              ? "text-black border border-white bg-white font-medium rounded-full text-xs md:text-lg px-5 py-2.5 text-center mr-2 mb-2"
+              : "text-white hover:text-black border border-white hover:bg-white font-medium rounded-full text-xs md:text-lg px-5 py-2.5 text-center mr-2 mb-2"
           }
         >
           Long Break
@@ -111,9 +111,9 @@ export default function Home() {
       {/* timer */}
       <div className="flex items-center justify-center mt-8">
         {isRunning ? (
-          <p className="text-9xl font-bold">{`${minutes}:${seconds}`}</p>
+          <p className="text-8xl md:text-9xl font-bold">{`${minutes}:${seconds}`}</p>
         ) : (
-          <p className="text-9xl font-bold">{`${minutes}:00`}</p>
+          <p className="text-8xl md:text-9xl font-bold">{`${minutes}:00`}</p>
         )}
       </div>
       <div className="flex items-center justify-center mt-8">
@@ -144,13 +144,13 @@ export default function Home() {
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            stroke-width="1.5"
+            strokeWidth="1.5"
             stroke="currentColor"
             className="w-9 h-9"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
             />
           </svg>
@@ -169,13 +169,11 @@ export default function Home() {
         />
       </div>
       {/* embed spotify */}
-      <div className="mt-12 flex justify-end">
+      <div className="mt-12 flex justify-center md:justify-end">
         <iframe
-          className="rounded-lg"
+          className="rounded-lg h-80 md:w-2/5 md:h-40"
           src="https://open.spotify.com/embed/playlist/4Zjli1P13J5mmSCD5iKAXK?utm_source=generator&theme=1"
-          width="40%"
-          height="152"
-          allowfullscreen=""
+          allowFullScreen={true}
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
           loading="lazy"
         ></iframe>

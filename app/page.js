@@ -162,7 +162,7 @@ export default function Home() {
         />
       </div>
       {/* embed spotify */}
-      <div className="mt-12">
+      <div className="mt-12 flex justify-end">
         <iframe
           className="rounded-lg"
           src="https://open.spotify.com/embed/playlist/4Zjli1P13J5mmSCD5iKAXK?utm_source=generator&theme=1"

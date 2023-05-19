@@ -1,7 +1,40 @@
+"use client";
 import { Fasthand, Alkatra } from "next/font/google";
+import { useState } from "react";
+import { useTimer } from "react-timer-hook";
+import Settings from "./settings";
+
 const fastHand = Fasthand({ subsets: ["latin"], weight: ["400"] });
 const alkatra = Alkatra({ subsets: ["latin"], weight: ["400"] });
 export default function Home() {
+  const [isPomodoro, setIsPomodoro] = useState(true);
+  const [isShortBreak, setIsShortBreak] = useState(false);
+  const [isLongBreak, setIsLongBreak] = useState(false);
+
+  const [pomodoroTime, setPomodoroTime] = useState(25);
+  const [shortBreakTime, setShortBreakTime] = useState(5);
+  const [longBreakTime, setLongBreakTime] = useState(10);
+
+  const { seconds, minutes, start, pause, restart, isRunning } = useTimer({
+    expiryTimestamp: () =>
+      new Date().setSeconds(new Date().getSeconds() + pomodoroTime * 60),
+    autoStart: false,
+  });
+
+  // function to reset timer
+  const resetTimer = () => {
+    if (isPomodoro) restartTimer(pomodoroTime);
+    if (isShortBreak) restartTimer(shortBreakTime);
+    if (isLongBreak) restartTimer(longBreakTime);
+  };
+
+  // function restart timer
+  const restartTimer = (type) => {
+    const time = new Date();
+    time.setSeconds(time.getSeconds() + type * 60);
+    restart(time, false);
+  };
+
   return (
     <div className="p-10 text-white h-screen bg-center bg-cover bg-no-repeat bg-[url('/bg.gif')] bg-gray-300 bg-blend-multiply">
       {/* header */}
@@ -20,37 +53,86 @@ export default function Home() {
       <div className="flex items-center justify-center mt-8">
         {/* menus */}
         <button
+          onClick={() => {
+            setIsPomodoro(true);
+            setIsShortBreak(false);
+            setIsLongBreak(false);
+            restartTimer(pomodoroTime, false);
+          }}
           type="button"
-          className="text-white hover:text-black border border-white hover:bg-white font-medium rounded-full text-lg px-5 py-2.5 text-center mr-2 mb-2"
+          className={
+            isPomodoro
+              ? "text-black border border-white bg-white font-medium rounded-full text-lg px-5 py-2.5 text-center mr-2 mb-2"
+              : "text-white hover:text-black border border-white hover:bg-white font-medium rounded-full text-lg px-5 py-2.5 text-center mr-2 mb-2"
+          }
         >
           Pomodoro
         </button>
         <button
+          onClick={() => {
+            setIsPomodoro(false);
+            setIsShortBreak(true);
+            setIsLongBreak(false);
+            restartTimer(shortBreakTime, false);
+          }}
           type="button"
-          className="text-white hover:text-black border border-white hover:bg-white font-medium rounded-full text-lg px-5 py-2.5 text-center mr-2 mb-2"
+          className={
+            isShortBreak
+              ? "text-black border border-white bg-white font-medium rounded-full text-lg px-5 py-2.5 text-center mr-2 mb-2"
+              : "text-white hover:text-black border border-white hover:bg-white font-medium rounded-full text-lg px-5 py-2.5 text-center mr-2 mb-2"
+          }
         >
           Short Break
         </button>
         <button
+          onClick={() => {
+            setIsPomodoro(false);
+            setIsShortBreak(false);
+            setIsLongBreak(true);
+            restartTimer(longBreakTime, false);
+          }}
           type="button"
-          className="text-white hover:text-black border border-white hover:bg-white font-medium rounded-full text-lg px-5 py-2.5 text-center mr-2 mb-2"
+          className={
+            isLongBreak
+              ? "text-black border border-white bg-white font-medium rounded-full text-lg px-5 py-2.5 text-center mr-2 mb-2"
+              : "text-white hover:text-black border border-white hover:bg-white font-medium rounded-full text-lg px-5 py-2.5 text-center mr-2 mb-2"
+          }
         >
           Long Break
         </button>
       </div>
       {/* timer */}
       <div className="flex items-center justify-center mt-8">
-        <p className="text-9xl font-bold">25:00</p>
+        {isRunning ? (
+          <p className="text-9xl font-bold">{`${minutes}:${seconds}`}</p>
+        ) : (
+          <p className="text-9xl font-bold">{`${minutes}:00`}</p>
+        )}
       </div>
       <div className="flex items-center justify-center mt-8">
+        {!isRunning ? (
+          <button
+            onClick={start}
+            type="button"
+            className="text-black bg-white hover:text-white border border-white hover:bg-transparent font-medium rounded-full text-lg px-5 py-2.5 text-center mr-4 mb-2"
+          >
+            Start
+          </button>
+        ) : (
+          <button
+            onClick={pause}
+            type="button"
+            className="text-black bg-white hover:text-white border border-white hover:bg-transparent font-medium rounded-full text-lg px-5 py-2.5 text-center mr-4 mb-2"
+          >
+            Stop
+          </button>
+        )}
+        {/* reset button */}
         <button
           type="button"
-          className="text-black bg-white hover:text-white border border-white hover:bg-transparent font-medium rounded-full text-lg px-5 py-2.5 text-center mr-4 mb-2"
+          onClick={resetTimer}
+          className="text-white mr-4 mb-2"
         >
-          Start
-        </button>
-        {/* reset button */}
-        <button type="button" className="text-white mr-4 mb-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -67,27 +149,17 @@ export default function Home() {
           </svg>
         </button>
         {/* options button */}
-        <button type="button" className="text-white mr-4 mb-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            className="w-9 h-9"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"
-            />
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-            />
-          </svg>
-        </button>
+        <Settings
+          isShortBreak={isShortBreak}
+          isLongBreak={isLongBreak}
+          restartTimer={restartTimer}
+          pomodoroTime={pomodoroTime}
+          setPomodoroTime={setPomodoroTime}
+          shortBreakTime={shortBreakTime}
+          setShortBreakTime={setShortBreakTime}
+          longBreakTime={longBreakTime}
+          setLongBreakTime={setLongBreakTime}
+        />
       </div>
       {/* embed spotify */}
       <div className="mt-12">

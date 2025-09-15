@@ -43,7 +43,7 @@ export default function Home() {
   };
 
   return (
-    <div className="p-10 text-white h-screen bg-center bg-cover bg-no-repeat bg-[url('/bg.gif')] bg-gray-300 bg-blend-multiply">
+    <div className="p-4 md:px-10 md:pt-10 text-white min-h-screen bg-center bg-cover bg-no-repeat bg-[url('/bg.gif')] bg-gray-300 bg-blend-multiply">
       {/* header */}
       <div className="mt-4 w-fit text-center md:text-start">
         <h1 className={`${fastHand.className} text-5xl`}>Study With Me</h1>
@@ -164,13 +164,13 @@ export default function Home() {
           setLongBreakTime={setLongBreakTime}
         />
       </div>
+
       {/* embed spotify */}
-      <div className="mt-12 flex justify-center md:justify-end">
+      <div className="fixed -bottom-14 right-4">
         <iframe
-          className="rounded-lg h-80 md:w-2/5 md:h-40"
-          src="https://open.spotify.com/embed/playlist/4Zjli1P13J5mmSCD5iKAXK?utm_source=generator&theme=1"
+          src="https://open.spotify.com/embed/playlist/4Zjli1P13J5mmSCD5iKAXK?utm_source=generator&theme=0"
           allowFullScreen={true}
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"
           loading="lazy"
         ></iframe>
       </div>

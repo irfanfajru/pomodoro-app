@@ -7,26 +7,35 @@ import useSound from "use-sound";
 
 const fastHand = Fasthand({ subsets: ["latin"], weight: ["400"] });
 const alkatra = Alkatra({ subsets: ["latin"], weight: ["400"] });
+
+const TIMER_STATE = {
+  START: "start",
+  PAUSE: "pause",
+  RESUME: "resume",
+};
+
 export default function Home() {
-  const [play] = useSound("/alarm-sound.mp3");
+  const [playSound] = useSound("/alarm-sound.mp3");
 
   const [isPomodoro, setIsPomodoro] = useState(true);
   const [isShortBreak, setIsShortBreak] = useState(false);
   const [isLongBreak, setIsLongBreak] = useState(false);
+  const [timerState, setTimerState] = useState(TIMER_STATE.START);
 
   const [pomodoroTime, setPomodoroTime] = useState(25);
   const [shortBreakTime, setShortBreakTime] = useState(5);
   const [longBreakTime, setLongBreakTime] = useState(10);
 
-  const { seconds, minutes, start, pause, restart, isRunning } = useTimer({
-    expiryTimestamp: () =>
-      new Date().setSeconds(new Date().getSeconds() + pomodoroTime * 60),
-    autoStart: false,
-    onExpire: () => {
-      play();
-      resetTimer();
-    },
-  });
+  const { seconds, minutes, start, pause, resume, restart, isRunning } =
+    useTimer({
+      expiryTimestamp: () =>
+        new Date().setSeconds(new Date().getSeconds() + pomodoroTime * 60),
+      autoStart: false,
+      onExpire: () => {
+        playSound();
+        resetTimer();
+      },
+    });
 
   // function to reset timer
   const resetTimer = () => {
@@ -40,6 +49,7 @@ export default function Home() {
     const time = new Date();
     time.setSeconds(time.getSeconds() + type * 60);
     restart(time, false);
+    setTimerState(TIMER_STATE.START);
   };
 
   return (
@@ -113,7 +123,7 @@ export default function Home() {
         <p className="text-8xl md:text-9xl font-bold">{`${minutes}:${seconds}`}</p>
       </div>
       <div className="flex items-center justify-center mt-8">
-        {!isRunning ? (
+        {!isRunning && timerState == TIMER_STATE.START && (
           <button
             onClick={start}
             type="button"
@@ -121,15 +131,34 @@ export default function Home() {
           >
             Start
           </button>
-        ) : (
+        )}
+
+        {!isRunning && timerState == TIMER_STATE.PAUSE && (
           <button
-            onClick={pause}
+            onClick={() => {
+              resume();
+              setTimerState(TIMER_STATE.RESUME);
+            }}
             type="button"
             className="text-black bg-white hover:text-white border border-white hover:bg-transparent font-medium rounded-full text-lg px-5 py-2.5 text-center mr-4 mb-2"
           >
-            Stop
+            Resume
           </button>
         )}
+
+        {isRunning && (
+          <button
+            onClick={() => {
+              pause();
+              setTimerState(TIMER_STATE.PAUSE);
+            }}
+            type="button"
+            className="text-black bg-white hover:text-white border border-white hover:bg-transparent font-medium rounded-full text-lg px-5 py-2.5 text-center mr-4 mb-2"
+          >
+            Pause
+          </button>
+        )}
+
         {/* reset button */}
         <button
           type="button"

@@ -12,21 +12,29 @@ export default function Settings({
   setShortBreakTime,
   longBreakTime,
   setLongBreakTime,
+  isShowNotif,
+  setIsShowNotif,
 }) {
-  let [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [inputPomodoro, setInputPomodoro] = useState(pomodoroTime);
   const [inputShortBreak, setInputShortBreak] = useState(shortBreakTime);
   const [inputLongBreak, setInputLongBreak] = useState(longBreakTime);
 
   function closeModal() {
     setIsOpen(false);
+    setInputPomodoro(pomodoroTime);
+    setInputShortBreak(shortBreakTime);
+    setInputLongBreak(longBreakTime);
   }
 
   function openModal() {
     setIsOpen(true);
+    setInputPomodoro(pomodoroTime);
+    setInputShortBreak(shortBreakTime);
+    setInputLongBreak(longBreakTime);
   }
 
-  function saveChange() {
+  function saveChanges() {
     let time = inputPomodoro;
     if (isShortBreak) time = inputShortBreak;
     if (isLongBreak) time = inputLongBreak;
@@ -107,7 +115,9 @@ export default function Settings({
                       <input
                         placeholder={pomodoroTime}
                         onChange={(e) => {
-                          setInputPomodoro(e.target.value);
+                          setInputPomodoro(
+                            e.target.value ? e.target.value : pomodoroTime
+                          );
                         }}
                         min={1}
                         type="number"
@@ -120,7 +130,9 @@ export default function Settings({
                       </label>
                       <input
                         onChange={(e) => {
-                          setInputShortBreak(e.target.value);
+                          setInputShortBreak(
+                            e.target.value ? e.target.value : shortBreakTime
+                          );
                         }}
                         type="number"
                         min={1}
@@ -134,7 +146,9 @@ export default function Settings({
                       </label>
                       <input
                         onChange={(e) => {
-                          setInputLongBreak(e.target.value);
+                          setInputLongBreak(
+                            e.target.value ? e.target.value : longBreakTime
+                          );
                         }}
                         placeholder={longBreakTime}
                         min={1}
@@ -142,19 +156,6 @@ export default function Settings({
                         className="bg-gray-50 text-black text-sm rounded-lg block w-full p-2.5"
                       />
                     </div>
-                  </div>
-                  <div className="mt-4">
-                    <label className="relative inline-flex items-center mb-4 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        value=""
-                        className="sr-only peer"
-                      />
-                      <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                      <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                        Show notifications (on going)
-                      </span>
-                    </label>
                   </div>
                   <div className="mt-12 justify-end flex">
                     <button
@@ -167,7 +168,7 @@ export default function Settings({
                     <button
                       type="button"
                       className="text-black bg-white hover:text-white border border-white hover:bg-transparent text-sm font-medium rounded-full px-5 py-2.5 text-center mr-4"
-                      onClick={saveChange}
+                      onClick={saveChanges}
                     >
                       Save
                     </button>

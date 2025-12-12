@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTimer } from "react-timer-hook";
 import Settings from "./settings";
 import useSound from "use-sound";
+import { useNotifications } from "./hooks/useNotifications";
 
 const fastHand = Fasthand({ subsets: ["latin"], weight: ["400"] });
 const alkatra = Alkatra({ subsets: ["latin"], weight: ["400"] });
@@ -16,6 +17,7 @@ const TIMER_STATE = {
 
 export default function Home() {
   const [playSound] = useSound("/alarm-sound.mp3");
+  const { sendNotification } = useNotifications();
 
   const [isPomodoro, setIsPomodoro] = useState(true);
   const [isShortBreak, setIsShortBreak] = useState(false);
@@ -34,6 +36,27 @@ export default function Home() {
       onExpire: () => {
         playSound();
         resetTimer();
+
+        if (isPomodoro) {
+          sendNotification(
+            "Pomodoro Complete!",
+            "Time's up! Great work — take a break."
+          );
+        }
+
+        if (isShortBreak) {
+          sendNotification(
+            "Short Break Over",
+            "Your short break is finished. Ready for the next Pomodoro?"
+          );
+        }
+
+        if (isLongBreak) {
+          sendNotification(
+            "Long Break Complete",
+            "Your long break has ended. Time to get back to focus!"
+          );
+        }
       },
     });
 
